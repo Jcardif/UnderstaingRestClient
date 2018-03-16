@@ -122,14 +122,14 @@ namespace RestService.Operations
             try
             {
                 conn = DatabaseConn.CreateConnection();
-                var cmd=new MySqlCommand(query, conn);
+                var cmd = new MySqlCommand(query, conn);
                 var reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
                     reader.Close();
                     query =
                         $"UPDATE tableproduct SET Name='{product.Name}', Price='{product.Price}', Category='{product.Category}'";
-                    var cmd2=new MySqlCommand(query, conn);
+                    var cmd2 = new MySqlCommand(query, conn);
                     cmd2.ExecuteNonQuery();
                     return true;
                 }
@@ -140,6 +140,38 @@ namespace RestService.Operations
             {
                 Console.WriteLine(e);
                 throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public bool DeleteProduct(int id)
+        {
+            var query = $"SELECT * FROM tableproduct WHERE Id={id}";
+            try
+            {
+                conn = DatabaseConn.CreateConnection();
+                var cmd = new MySqlCommand(query, conn);
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    reader.Close();
+                    query = $"DELETE FROM tableproduct WHERE Id={id}";
+                    return true;
+                }
+
+                return false
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            finally
+            {
+                conn.Close();
             }
         }
     }
