@@ -6,6 +6,8 @@ namespace UnderstaingRestClient
 {
     public class Repo
     {
-        public string Name;
+        public string name;
+        public long id;
+        public string full_name;
     }
 }

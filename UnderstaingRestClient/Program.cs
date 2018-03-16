@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace UnderstaingRestClient
 {
@@ -20,9 +21,12 @@ namespace UnderstaingRestClient
             Client.DefaultRequestHeaders.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
             Client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-            var streamTask = Client.GetStreamAsync("https://api.github.com/orgs/dotnet/repos");
-            var serilizer = new DataContractJsonSerializer(typeof(List<Repo>));
-            Console.WriteLine(message);
+            var streamTask = await Client.GetStringAsync("https://api.github.com/orgs/dotnet/repos");
+            var repository = JsonConvert.DeserializeObject<List<Repo>>(streamTask);
+            foreach (var repo in repository)
+            {
+                Console.WriteLine($"{repo.name}\t{repo.full_name}\t{repo.id}");
+            }
         }
     }
 }
