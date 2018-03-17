@@ -31,7 +31,7 @@ namespace RestService.Operations
         public int CreateProduct(Product product)
         {
             var query =
-                $"INSERT INTO tableproduct (Name, Price, Category) VALUES ('{product.Name}', {product.Price}', {product.Category}')";
+                $"INSERT INTO tableproduct (Name, Price, Category) VALUES ('{product.Name}',{product.Price},'{product.Category}')";
 
             try
             {
@@ -128,7 +128,7 @@ namespace RestService.Operations
                 {
                     reader.Close();
                     query =
-                        $"UPDATE tableproduct SET Name='{product.Name}', Price='{product.Price}', Category='{product.Category}'";
+                        $"UPDATE tableproduct SET Name='{product.Name}', Price='{product.Price}', Category='{product.Category}' WHERE Id={id}";
                     var cmd2 = new MySqlCommand(query, conn);
                     cmd2.ExecuteNonQuery();
                     return true;
@@ -159,10 +159,12 @@ namespace RestService.Operations
                 {
                     reader.Close();
                     query = $"DELETE FROM tableproduct WHERE Id={id}";
+                    var cmd2=new MySqlCommand(query, conn);
+                    cmd2.ExecuteNonQuery();
                     return true;
                 }
 
-                return false
+                return false;
             }
             catch (Exception e)
             {
