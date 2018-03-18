@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 using MySql.Data.MySqlClient;
 using RestService.Models;
 
 namespace RestService.Operations
 {
-    public  class DatabaseConn
+    public class DatabaseConn
     {
         private static MySqlConnection conn;
 
         public static MySqlConnection CreateConnection()
         {
-            conn=new MySqlConnection(ConfigurationManager.ConnectionStrings["productConnectionString"].ConnectionString);
+            conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["productConnectionString"]
+                .ConnectionString);
             conn.Open();
             return conn;
         }
@@ -24,6 +23,7 @@ namespace RestService.Operations
             conn.Close();
         }
     }
+
     public class ProductPersistence
     {
         private MySqlConnection conn;
@@ -57,12 +57,12 @@ namespace RestService.Operations
             try
             {
                 conn = DatabaseConn.CreateConnection();
-                var cmd=new MySqlCommand(query, conn);
+                var cmd = new MySqlCommand(query, conn);
                 var reader = cmd.ExecuteReader();
                 var productLst = new List<Product>();
                 while (reader.Read())
                 {
-                    var product = new Product()
+                    var product = new Product
                     {
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
@@ -91,7 +91,7 @@ namespace RestService.Operations
                 var reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
-                    var product = new Product()
+                    var product = new Product
                     {
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
@@ -159,7 +159,7 @@ namespace RestService.Operations
                 {
                     reader.Close();
                     query = $"DELETE FROM tableproduct WHERE Id={id}";
-                    var cmd2=new MySqlCommand(query, conn);
+                    var cmd2 = new MySqlCommand(query, conn);
                     cmd2.ExecuteNonQuery();
                     return true;
                 }

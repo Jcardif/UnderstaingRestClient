@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -15,33 +14,33 @@ namespace RestService.Controllers
         public List<Product> Get()
         {
             var lstProduct = new ProductPersistence().GetAllProducts();
-            if(lstProduct==null)
+            if (lstProduct == null)
                 throw new HttpResponseException(HttpStatusCode.NoContent);
             return lstProduct;
         }
 
         // GET: api/Product/5
         public Product Get(int id)
-        { 
-            var product=new ProductPersistence().GetProdut(id);
-            if (product==null)
+        {
+            var product = new ProductPersistence().GetProdut(id);
+            if (product == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             return product;
         }
 
         // POST: api/Product
-        public HttpResponseMessage Post([FromBody]Product product)
+        public HttpResponseMessage Post([FromBody] Product product)
         {
-            var id=new ProductPersistence().CreateProduct(product);
-            var response=new HttpResponseMessage(HttpStatusCode.Created);
-            response.Headers.Location=new Uri(Request.RequestUri, string.Format($"Product/{id}"));
+            var id = new ProductPersistence().CreateProduct(product);
+            var response = new HttpResponseMessage(HttpStatusCode.Created);
+            response.Headers.Location = new Uri(Request.RequestUri, string.Format($"Product/{id}"));
             return response;
         }
 
         // PUT: api/Product/5
-        public HttpResponseMessage Put(int id, [FromBody]Product product)
+        public HttpResponseMessage Put(int id, [FromBody] Product product)
         {
-            bool isInRecord=new ProductPersistence().UpdateProduct(id, product);
+            var isInRecord = new ProductPersistence().UpdateProduct(id, product);
             var response = isInRecord
                 ? new HttpResponseMessage(HttpStatusCode.NoContent)
                 : new HttpResponseMessage(HttpStatusCode.NotFound);
@@ -51,7 +50,7 @@ namespace RestService.Controllers
         // DELETE: api/Product/5
         public HttpResponseMessage Delete(int id)
         {
-            bool isInRecord = new ProductPersistence().DeleteProduct(id);
+            var isInRecord = new ProductPersistence().DeleteProduct(id);
             var response = isInRecord
                 ? new HttpResponseMessage(HttpStatusCode.NoContent)
                 : new HttpResponseMessage(HttpStatusCode.NotFound);

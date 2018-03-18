@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestService.Models;
@@ -11,21 +10,22 @@ namespace UnderstandingRestClient
 {
     internal class RestClient
     {
-        private  static readonly HttpClient Client=new HttpClient();
+        private static readonly HttpClient Client = new HttpClient();
+
         private static void Main()
         {
             RunAsync().GetAwaiter().GetResult();
         }
-        static void ShowProductList(List<Product> productlist)
+
+        private static void ShowProductList(List<Product> productlist)
         {
             Console.Clear();
             foreach (var product in productlist)
-            {
-                Console.WriteLine($"Id : {product.Id}\nName : {product.Name}\nPrice : {product.Price}\n{product.Category}\n\n");
-            }
+                Console.WriteLine(
+                    $"Id : {product.Id}\nName : {product.Name}\nPrice : {product.Price}\n{product.Category}\n\n");
         }
 
-        static void ShowProduct(Product product)
+        private static void ShowProduct(Product product)
         {
             Console.Clear();
             Console.WriteLine($"Id : {product.Id}\nName : {product.Name}\nPrice : {product.Price}\n{product.Category}");
@@ -33,7 +33,7 @@ namespace UnderstandingRestClient
 
         private static async Task RunAsync()
         {
-            Client.BaseAddress=new Uri("http://localhost:60154");
+            Client.BaseAddress = new Uri("http://localhost:60154");
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/Json"));
 
@@ -54,7 +54,7 @@ namespace UnderstandingRestClient
                         Console.ReadKey();
                         break;
                     case 3:
-                        Product prdt = new Product();
+                        var prdt = new Product();
                         Console.Write("Name : ");
                         prdt.Name = Console.ReadLine();
                         Console.Write("Category : ");
@@ -69,7 +69,7 @@ namespace UnderstandingRestClient
                         Console.WriteLine("Enter the Id of the product to modify");
                         var id = Convert.ToInt32(Console.ReadLine());
                         Console.WriteLine("Enter Product Details");
-                        Product prdt1 = new Product();
+                        var prdt1 = new Product();
                         Console.Write("Name : ");
                         prdt1.Name = Console.ReadLine();
                         Console.Write("Category : ");
@@ -93,29 +93,23 @@ namespace UnderstandingRestClient
             }
             finally
             {
-                
             }
         }
 
         private static async Task<List<Product>> GetProductListAsync()
         {
-            List<Product>lstproduct = new List<Product>();
-            HttpResponseMessage response = await Client.GetAsync("api/Product");
+            var lstproduct = new List<Product>();
+            var response = await Client.GetAsync("api/Product");
             if (response.IsSuccessStatusCode)
-            {
                 lstproduct = JsonConvert.DeserializeObject<List<Product>>(await response.Content.ReadAsStringAsync());
-            }
             return lstproduct;
         }
 
         private static async Task<Product> GetProductAsync(int id)
         {
-            Product product=new Product();
-            HttpResponseMessage response = await Client.GetAsync($"api/Product/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                product = await response.Content.ReadAsAsync<Product>();
-            }
+            var product = new Product();
+            var response = await Client.GetAsync($"api/Product/{id}");
+            if (response.IsSuccessStatusCode) product = await response.Content.ReadAsAsync<Product>();
             return product;
         }
 
