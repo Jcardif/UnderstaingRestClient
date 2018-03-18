@@ -39,7 +39,7 @@ namespace UnderstandingRestClient
 
             try
             {
-                Console.WriteLine("1. Get All\n2. Get With Id\n3. Create an Object\n4. Modify Existing Product");
+                Console.WriteLine("1. Get All\n2. Get With Id\n3. Create an Object\n4. Modify Existing Product\n5. Delete Product");
                 switch (Convert.ToInt32(Console.ReadLine()))
                 {
                     case 1:
@@ -81,7 +81,13 @@ namespace UnderstandingRestClient
                         Console.WriteLine("Product updated successfully as below");
                         ShowProduct(await GetProductAsync(id));
                         break;
-                    default:
+                    case 5:
+                        Console.WriteLine("Enter the Id of the product to Delete");
+                        var id1 = Convert.ToInt32(Console.ReadLine());
+                        await DeleteProductAsync(id1);
+                        Console.WriteLine("Product Deleted successfully");
+                        break;
+                        default:
                         Console.WriteLine("Choose a value between 1 and 4");
                         break;
                 }
@@ -123,6 +129,12 @@ namespace UnderstandingRestClient
         private static async Task UpdateProductAsync(int id, Product product)
         {
             var response = await Client.PutAsJsonAsync($"api/product/{id}", product);
+            response.EnsureSuccessStatusCode();
+        }
+
+        private static async Task DeleteProductAsync(int id)
+        {
+            var response = await Client.DeleteAsync($"api/Product/{id}");
             response.EnsureSuccessStatusCode();
         }
     }
